@@ -1428,7 +1428,7 @@ m4+definitions(['
    // Instantiate the program. (This approach is required for an m4-defined name.)
    m4_define(['m4_prog'], ['riscv_']_prog_name['_prog'])
    m4+m4_prog()
-   //m4+instrs_for_viz()
+   m4+instrs_for_viz()
    
    // ==============
    // IMem and Fetch
