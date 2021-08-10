@@ -89,8 +89,8 @@ m4_ifelse_block(m4_debug, 1, ['
    $reset = *reset;
    $is_reg_rs1 = *is_reg_rs1;
    $is_reg_rs2 = *is_reg_rs2;
-   $reg_rs1 = *reg_rs1;
-   $reg_rs2 = *reg_rs2;
+   $reg_rs1[4:0] = *reg_rs1;
+   $reg_rs2[4:0] = *reg_rs2;
    $valid_decode = *valid_decode;
    $dest_reg_valid = *dest_reg_valid; 
    $valid_dest_reg_valid_rd[2:0] = *valid_dest_reg_valid_rd;
