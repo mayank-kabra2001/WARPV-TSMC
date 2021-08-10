@@ -80,6 +80,7 @@ m4_ifelse_block(m4_debug, 1, ['
         input [M4_WORD_RANGE] rslt_wr,
         input pending_wr,
         input dest_inp_pending,
+        input reg_wr_pending_wr, 
         output reg pending
    ); 
        
@@ -108,6 +109,7 @@ m4_ifelse_block(m4_debug, 1, ['
    $dest_reg_wr[4:0] = *dest_reg_wr;
    $rslt_wr[M4_WORD_RANGE] = *rslt_wr;
    $pending_wr = *pending_wr;
+   $reg_wr_pending_wr = *reg_wr_pending_wr; 
    
    /M4_REGS_HIER
    /src[2:1]
@@ -159,7 +161,7 @@ m4_ifelse_block(m4_debug, 1, ['
    m4_ifelse_block(M4_PENDING_ENABLED, 1, ['
    // Write $   \SV_pluspending along with $value, but coded differently because it must be reset.
    /regs[*]
-      <<1$pending = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending : /top$pending_wr);
+      <<1$pending = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending_wr : /top$pending_wr);
       `BOGUS_USE($value)
    '])
    
