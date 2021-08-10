@@ -80,8 +80,7 @@ m4_ifelse_block(m4_debug, 1, ['
         input [M4_WORD_RANGE] rslt_wr,
         input pending_wr,
         input dest_inp_pending,
-        input reg_wr_pending_wr, 
-        output reg pending
+        input reg_wr_pending_wr
    ); 
        
 \TLV
@@ -163,9 +162,7 @@ m4_ifelse_block(m4_debug, 1, ['
    /regs[*]
       <<1$pending = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending_wr : /top$pending_wr);
       `BOGUS_USE($value)
-   '])
-   
-   *pending = /regs[$dest_reg_wr]<<1$pending;         
+   '])   
    
 \SV
    endmodule
