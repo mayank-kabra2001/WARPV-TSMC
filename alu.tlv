@@ -1,4 +1,4 @@
-\m4_TLV_version 1d -p verilog --bestsv --noline: tl-x.org
+\m4_TLV_version 1d: tl-x.org
 \SV 
    m4_define(['m4_debug'], 0)
    
@@ -34,7 +34,7 @@
    endmodule
 '])
          
-    module alu(
+    module alu (
        input clk,
        input reset,
        input [M4_WORD_RANGE] reg_value1, 
@@ -46,28 +46,23 @@
        output reg [M4_WORD_RANGE] add_rslt,
        output reg [M4_WORD_RANGE] sub_rslt
        ); 
+
 \TLV
-   |alu 
-      @0   
-         $reset = *reset;
-         $reg_value1 = *reg_value1; 
-         $reg_value2 = *reg_value2; 
-         $raw_i_imm = *raw_i_imm; 
-         $raw_funct7_5 = *raw_funct7_5;
-         $valid_exe = *valid_exe; 
-            
-      @4
-         ?$valid_exe
-            $addi_rslt[M4_WORD_RANGE]  = $reg_value1 + $raw_i_imm;  // TODO: This has its own adder; could share w/ add/sub.
-            $add_sub_rslt[M4_WORD_RANGE] = ($raw_funct7_5 == 1) ?  $reg_value1 - $reg_value2 : $reg_value1 + $reg_value2;
-            $add_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
-            $sub_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
-            
-         \SV_plus
-            always @(posedge clk) begin 
-               *addi_rslt = $addi_rslt; 
-               *add_rslt = $add_rslt;
-               *sub_rslt = $sub_rslt; 
-            end 
+   $reset = *reset;
+   $reg_value1 = *reg_value1; 
+   $reg_value2 = *reg_value2; 
+   $raw_i_imm = *raw_i_imm; 
+   $raw_funct7_5 = *raw_funct7_5;
+   $valid_exe = *valid_exe; 
+
+   //?$valid_exe
+   $addi_rslt[M4_WORD_RANGE]  = $reg_value1 + $raw_i_imm;  // TODO: This has its own adder; could share w/ add/sub.
+   $add_sub_rslt[M4_WORD_RANGE] = ($raw_funct7_5 == 1) ?  $reg_value1 - $reg_value2 : $reg_value1 + $reg_value2;
+   $add_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
+   $sub_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
+
+   *addi_rslt = $addi_rslt;
+   *add_rslt = $add_rslt;
+   *sub_rslt = $sub_rslt;
 \SV
    endmodule
