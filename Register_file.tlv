@@ -1,6 +1,5 @@
 \m4_TLV_version 1d -p verilog --bestsv --noline: tl-x.org
 \SV
-   m4_include_lib(['https://raw.githubusercontent.com/mayank-kabra2001/WARPV-TSMC/main/warpv.tlv'])
    m4_define(['m4_debug'],0)
 \SV
 
