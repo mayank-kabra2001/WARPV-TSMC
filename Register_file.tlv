@@ -67,8 +67,6 @@ m4_ifelse_block(m4_debug, 1, ['
         input dest_reg_now, 
         input [2:0] rslt,
         input [2:0] reg_wr_pending,
-        input [M4_WORD_RANGE] data_value, 
-        input src_pending, 
         output reg replay_int,
         output reg out_pending1,
         output reg out_pending2,
@@ -78,8 +76,6 @@ m4_ifelse_block(m4_debug, 1, ['
         input valid_dest_reg_valid_wr,
         input [4:0] dest_reg_wr,
         input [M4_WORD_RANGE] rslt_wr,
-        input pending_wr,
-        input dest_inp_pending,
         input reg_wr_pending_wr
    ); 
        
@@ -99,18 +95,15 @@ m4_ifelse_block(m4_debug, 1, ['
    $dest_reg_now = *dest_reg_now; 
    $rslt[2:0] = *rslt; 
    $reg_wr_pending[2:0] = *reg_wr_pending; 
-   $data_value = *data_value ; 
-   $src_pending = *src_pending ; 
-   $dest_inp_pending = *dest_inp_pending ; 
          // WRITE SIGNALS //
          
    $valid_dest_reg_valid_wr = *valid_dest_reg_valid_wr;
    $dest_reg_wr[4:0] = *dest_reg_wr;
    $rslt_wr[M4_WORD_RANGE] = *rslt_wr;
-   $pending_wr = *pending_wr;
    $reg_wr_pending_wr = *reg_wr_pending_wr; 
    
    /M4_REGS_HIER
+      
    /src[2:1]
       $is_reg = (#src == 1) ? /top$is_reg_rs1 : /top$is_reg_rs2;
       $reg[4:0] = (#src == 1) ? /top$reg_rs1 : /top$reg_rs2;
@@ -123,7 +116,7 @@ m4_ifelse_block(m4_debug, 1, ['
          m4_ifexpr(M4_REG_BYPASS_STAGES >= 1, ['(/top$valid_dest_reg_valid_rd[0] && (/top$goodPathMask[0] || /top$second_issue[0]) && (/top$dest_reg[0] == $reg)) ? {/top$rslt[0], /top$reg_wr_pending[0]} :'])
          m4_ifexpr(M4_REG_BYPASS_STAGES >= 2, ['(/top$valid_dest_reg_valid_rd[1] && (/top$goodPathMask[1] || /top$second_issue[1]) && (/top$dest_reg[1] == $reg)) ? {/top$rslt[1], /top$reg_wr_pending[1]} :'])
          m4_ifexpr(M4_REG_BYPASS_STAGES >= 3, ['(/top$valid_dest_reg_valid_rd[2] && (/top$goodPathMask[2] || /top$second_issue[2]) && (/top$dest_reg[2] == $reg)) ? {/top$rslt[2], /top$reg_wr_pending[2]} :'])
-         {/top$data_value, m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top$src_pending'])} : 0;
+         {/top/regs[$reg]>>M4_REG_BYPASS_STAGES$value;, m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$reg]>>M4_REG_BYPASS_STAGES$pending'])} : 0;
       // Replay if this source register is pending.
       $replay = $is_reg_condition && $pending;
       $dummy = 1'b0; 
@@ -137,7 +130,7 @@ m4_ifelse_block(m4_debug, 1, ['
       m4_ifexpr(M4_REG_BYPASS_STAGES >= 1, ['($valid_dest_reg_valid_rd[0] && ($goodPathMask[0] || $second_issue[0]) && ($dest_reg[0] == $dest_reg_now)) ? $reg_wr_pending[0] :'])
       m4_ifexpr(M4_REG_BYPASS_STAGES >= 2, ['($valid_dest_reg_valid_rd[1] && ($goodPathMask[1] || $second_issue[1]) && ($dest_reg[1] == $dest_reg_now)) ? $reg_wr_pending[1] :'])
       m4_ifexpr(M4_REG_BYPASS_STAGES >= 3, ['($valid_dest_reg_valid_rd[2] && ($goodPathMask[2] || $second_issue[2]) && ($dest_reg[2] == $dest_reg_now)) ? $reg_wr_pending[2] :'])
-      m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['$dest_inp_pending']) : 0;
+      m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$dest_reg]>>M4_REG_BYPASS_STAGES$pending']) : 0;
       // Combine replay conditions for pending source or dest registers.
    $replay_int = | /src[*]$replay || ($is_dest_condition && $dest_pending);
    
@@ -156,13 +149,14 @@ m4_ifelse_block(m4_debug, 1, ['
    
    /regs[*]
       <<0$value[M4_WORD_RANGE] = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$reg_write) ? /top$rslt_wr : $RETAIN);
-
+      
    m4_ifelse_block(M4_PENDING_ENABLED, 1, ['
    // Write $   \SV_pluspending along with $value, but coded differently because it must be reset.
    /regs[*]
-      <<1$pending = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending_wr : /top$pending_wr);
+      <<1$pending = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending_wr : $pending);
       `BOGUS_USE($value)
-   '])   
+   '])
+         
    
 \SV
    endmodule
