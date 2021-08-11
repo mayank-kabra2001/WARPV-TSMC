@@ -4045,7 +4045,7 @@ m4+definitions(['
    $raw_i_imm = *raw_i_imm; 
    $raw_funct7_5 = *raw_funct7_5;
    $valid_exe = *valid_exe; 
-   
+   `BOGUS_USE($valid_exe)
    //?$valid_exe
    $addi_rslt[M4_WORD_RANGE]  = $reg_value1 + $raw_i_imm;  // TODO: This has its own adder; could share w/ add/sub.
    $add_sub_rslt[M4_WORD_RANGE] = ($raw_funct7_5 == 1) ?  $reg_value1 - $reg_value2 : $reg_value1 + $reg_value2;
