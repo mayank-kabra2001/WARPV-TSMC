@@ -119,7 +119,7 @@ m4_ifelse_block(m4_debug, 1, ['
          {/top/regs[$reg]>>M4_REG_BYPASS_STAGES$value;, m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$reg]>>M4_REG_BYPASS_STAGES$pending'])} : 0;
       // Replay if this source register is pending.
       $replay = $is_reg_condition && $pending;
-      
+     
       // Also replay for pending dest reg to keep writes in order. Bypass dest reg pending to support this.
    $is_dest_condition = $dest_reg_valid && $valid_decode;  // Note, $dest_reg_valid is 0 for RISC-V sr0.
    $dest_pending = $is_dest_condition ? 
