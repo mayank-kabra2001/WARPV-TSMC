@@ -4126,7 +4126,7 @@ m4+definitions(['
    m4_ifelse_block(M4_PENDING_ENABLED, 1, ['
    // Write $   \SV_pluspending along with $value, but coded differently because it must be reset.
    /regs[*]
-      <<1$pending = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending_wr : $pending);
+      <<1$pending = ! *reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending_wr : $pending);
       `BOGUS_USE($value)
    '])
 
