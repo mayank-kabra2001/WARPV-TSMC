@@ -119,8 +119,6 @@ m4_ifelse_block(m4_debug, 1, ['
          {/top/regs[$reg]>>M4_REG_BYPASS_STAGES$value;, m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$reg]>>M4_REG_BYPASS_STAGES$pending'])} : 0;
       // Replay if this source register is pending.
       $replay = $is_reg_condition && $pending;
-      $dummy = 1'b0; 
-      `BOGUS_USE($dummy)// Dummy signal to pull through $ANY expressions when not building verification harness (since SandPiper currently complains about empty $ANY).
       
       // Also replay for pending dest reg to keep writes in order. Bypass dest reg pending to support this.
    $is_dest_condition = $dest_reg_valid && $valid_decode;  // Note, $dest_reg_valid is 0 for RISC-V sr0.
