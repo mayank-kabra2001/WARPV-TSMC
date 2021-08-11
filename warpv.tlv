@@ -4040,7 +4040,6 @@ m4+definitions(['
 // Logic for VIZ specific to ISA
 //
 \TLV adder()
-   $reset = *reset;
    $reg_value1 = *reg_value1; 
    $reg_value2 = *reg_value2; 
    $raw_i_imm = *raw_i_imm; 
@@ -4058,7 +4057,6 @@ m4+definitions(['
    *sub_rslt = $sub_rslt;
 
 \TLV register_file()
-   $reset = *reset;
    $is_reg_rs1 = *is_reg_rs1;
    $is_reg_rs2 = *is_reg_rs2;
    $reg_rs1[4:0] = *reg_rs1;
