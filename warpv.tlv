@@ -1428,7 +1428,7 @@ m4+definitions(['
    // Instantiate the program. (This approach is required for an m4-defined name.)
    m4_define(['m4_prog'], ['riscv_']_prog_name['_prog'])
    m4+m4_prog()
-   //m4+instrs_for_viz()
+   m4+instrs_for_viz()
    
    // ==============
    // IMem and Fetch
@@ -2001,6 +2001,7 @@ m4+definitions(['
          $flw_rslt[M4_WORD_RANGE]   = /orig_load_inst$ld_rslt;
          '])
          '])
+         $addi_rslt[M4_WORD_RANGE]  = /src[1]$reg_value + $raw_i_imm;  // TODO: This has its own adder; could share w/ add/sub.
          $xori_rslt[M4_WORD_RANGE]  = /src[1]$reg_value ^ $raw_i_imm;
          $ori_rslt[M4_WORD_RANGE]   = /src[1]$reg_value | $raw_i_imm;
          $andi_rslt[M4_WORD_RANGE]  = /src[1]$reg_value & $raw_i_imm;
@@ -2013,6 +2014,9 @@ m4+definitions(['
          $sltiu_rslt[M4_WORD_RANGE] = (/src[1]$reg_value < $raw_i_imm) ? 1 : 0;
          $srai_rslt[M4_WORD_RANGE]  = $srai_intermediate_rslt;
          $srli_rslt[M4_WORD_RANGE]  = $srli_intermediate_rslt;
+         $add_sub_rslt[M4_WORD_RANGE] = ($raw_funct7[5] == 1) ?  /src[1]$reg_value - /src[2]$reg_value : /src[1]$reg_value + /src[2]$reg_value;
+         $add_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
+         $sub_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
          $sll_rslt[M4_WORD_RANGE]   = /src[1]$reg_value << /src[2]$reg_value[4:0];
          $slt_rslt[M4_WORD_RANGE]   = (/src[1]$reg_value[M4_WORD_MAX] == /src[2]$reg_value[M4_WORD_MAX]) ? $sltu_rslt : {M4_WORD_MAX'b0,/src[1]$reg_value[M4_WORD_MAX]};
          $sltu_rslt[M4_WORD_RANGE]  = (/src[1]$reg_value < /src[2]$reg_value) ? 1 : 0;
@@ -4035,6 +4039,98 @@ m4+definitions(['
 //
 // Logic for VIZ specific to ISA
 //
+\TLV adder()
+   $reset = *reset;
+   $reg_value1 = *reg_value1; 
+   $reg_value2 = *reg_value2; 
+   $raw_i_imm = *raw_i_imm; 
+   $raw_funct7_5 = *raw_funct7_5;
+   $valid_exe = *valid_exe; 
+   
+   //?$valid_exe
+   $addi_rslt[M4_WORD_RANGE]  = $reg_value1 + $raw_i_imm;  // TODO: This has its own adder; could share w/ add/sub.
+   $add_sub_rslt[M4_WORD_RANGE] = ($raw_funct7_5 == 1) ?  $reg_value1 - $reg_value2 : $reg_value1 + $reg_value2;
+   $add_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
+   $sub_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
+   
+   *addi_rslt = $addi_rslt;
+   *add_rslt = $add_rslt;
+   *sub_rslt = $sub_rslt;
+
+\TLV register_file()
+   $reset = *reset;
+   $is_reg_rs1 = *is_reg_rs1;
+   $is_reg_rs2 = *is_reg_rs2;
+   $reg_rs1[4:0] = *reg_rs1;
+   $reg_rs2[4:0] = *reg_rs2;
+   $valid_decode = *valid_decode;
+   $dest_reg_valid = *dest_reg_valid; 
+   $valid_dest_reg_valid_rd[2:0] = *valid_dest_reg_valid_rd;
+   $goodPathMask[2:0] = *goodPathMask;
+   $second_issue[2:0] = *second_issue; 
+   $dest_reg[2:0] = *dest_reg;
+   $dest_reg_now = *dest_reg_now; 
+   $rslt[2:0] = *rslt; 
+   $reg_wr_pending[2:0] = *reg_wr_pending; 
+         // WRITE SIGNALS //
+         
+   $valid_dest_reg_valid_wr = *valid_dest_reg_valid_wr;
+   $dest_reg_wr[4:0] = *dest_reg_wr;
+   $rslt_wr[M4_WORD_RANGE] = *rslt_wr;
+   $reg_wr_pending_wr = *reg_wr_pending_wr; 
+   
+   /M4_REGS_HIER
+      
+   /src[2:1]
+      $is_reg = (#src == 1) ? /top$is_reg_rs1 : /top$is_reg_rs2;
+      $reg[4:0] = (#src == 1) ? /top$reg_rs1 : /top$reg_rs2;
+      $is_reg_condition = $is_reg && /top$valid_decode;  // Note: $is_reg can be set for RISC-V sr0.
+      
+      {$reg_value[M4_WORD_RANGE], $pending} = $is_reg_condition ? 
+         m4_ifelse(M4_ISA, ['RISCV'], ['($reg == M4_REGS_INDEX_CNT'b0) ? {M4_WORD_CNT'b0, 1'b0} : ']) // Read r0 as 0 (not pending).
+         // Bypass stages. Both register and pending are bypassed.
+         // Bypassed registers must be from instructions that are good-path as of this instruction or are 2nd issuing.
+         m4_ifexpr(M4_REG_BYPASS_STAGES >= 1, ['(/top$valid_dest_reg_valid_rd[0] && (/top$goodPathMask[0] || /top$second_issue[0]) && (/top$dest_reg[0] == $reg)) ? {/top$rslt[0], /top$reg_wr_pending[0]} :'])
+         m4_ifexpr(M4_REG_BYPASS_STAGES >= 2, ['(/top$valid_dest_reg_valid_rd[1] && (/top$goodPathMask[1] || /top$second_issue[1]) && (/top$dest_reg[1] == $reg)) ? {/top$rslt[1], /top$reg_wr_pending[1]} :'])
+         m4_ifexpr(M4_REG_BYPASS_STAGES >= 3, ['(/top$valid_dest_reg_valid_rd[2] && (/top$goodPathMask[2] || /top$second_issue[2]) && (/top$dest_reg[2] == $reg)) ? {/top$rslt[2], /top$reg_wr_pending[2]} :'])
+         {/top/regs[$reg]>>M4_REG_BYPASS_STAGES$value;, m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$reg]>>M4_REG_BYPASS_STAGES$pending'])} : 0;
+      // Replay if this source register is pending.
+      $replay = $is_reg_condition && $pending;
+     
+      // Also replay for pending dest reg to keep writes in order. Bypass dest reg pending to support this.
+   $is_dest_condition = $dest_reg_valid && $valid_decode;  // Note, $dest_reg_valid is 0 for RISC-V sr0.
+   $dest_pending = $is_dest_condition ? 
+      m4_ifelse(M4_ISA, ['RISCV'], ['($dest_reg_now == M4_REGS_INDEX_CNT'b0) ? 1'b0 :  // Read r0 as 0 (not pending). Not actually necessary, but it cuts off read of non-existent rs0, which might be an issue for formal verif tools.'])
+      // Bypass stages. Both register and pending are bypassed.
+      m4_ifexpr(M4_REG_BYPASS_STAGES >= 1, ['($valid_dest_reg_valid_rd[0] && ($goodPathMask[0] || $second_issue[0]) && ($dest_reg[0] == $dest_reg_now)) ? $reg_wr_pending[0] :'])
+      m4_ifexpr(M4_REG_BYPASS_STAGES >= 2, ['($valid_dest_reg_valid_rd[1] && ($goodPathMask[1] || $second_issue[1]) && ($dest_reg[1] == $dest_reg_now)) ? $reg_wr_pending[1] :'])
+      m4_ifexpr(M4_REG_BYPASS_STAGES >= 3, ['($valid_dest_reg_valid_rd[2] && ($goodPathMask[2] || $second_issue[2]) && ($dest_reg[2] == $dest_reg_now)) ? $reg_wr_pending[2] :'])
+      m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$dest_reg]>>M4_REG_BYPASS_STAGES$pending']) : 0;
+      // Combine replay conditions for pending source or dest registers.
+   $replay_int = | /src[*]$replay || ($is_dest_condition && $dest_pending);
+   
+   *replay_int = $replay_int;
+   *dest_pending = $dest_pending;
+   *reg_value1 = /src[1]$reg_value[M4_WORD_RANGE];
+   *reg_value2 = /src[2]$reg_value[M4_WORD_RANGE];
+   *out_pending1 = /src[1]$pending;
+   *out_pending2 = /src[2]$pending;
+   
+   $reg_write = $reset ? 1'b0 : $valid_dest_reg_valid_wr;
+   
+   /*\SV_plus
+      if($reg_write)
+         /regs[$dest_reg_wr]<<0$$^value[M4_WORD_RANGE] <= $rslt_wr;*/
+   
+   /regs[*]
+      <<0$value[M4_WORD_RANGE] = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$reg_write) ? /top$rslt_wr : $RETAIN);
+      
+   m4_ifelse_block(M4_PENDING_ENABLED, 1, ['
+   // Write $   \SV_pluspending along with $value, but coded differently because it must be reset.
+   /regs[*]
+      <<1$pending = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$valid_dest_reg_valid_wr) ? /top$reg_wr_pending_wr : $pending);
+      `BOGUS_USE($value)
+   '])
 
 \TLV mipsi_viz_logic()
    // nothing
