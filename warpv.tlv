@@ -4114,14 +4114,14 @@ m4+definitions(['
    *out_pending1 = /src[1]$pending;
    *out_pending2 = /src[2]$pending;
    
-   $reg_write = $reset ? 1'b0 : $valid_dest_reg_valid_wr;
+   $reg_write = *reset ? 1'b0 : $valid_dest_reg_valid_wr;
    
    /*\SV_plus
       if($reg_write)
          /regs[$dest_reg_wr]<<0$$^value[M4_WORD_RANGE] <= $rslt_wr;*/
    
    /regs[*]
-      <<0$value[M4_WORD_RANGE] = ! /top$reset && (((#regs == /top$dest_reg_wr) && /top$reg_write) ? /top$rslt_wr : $RETAIN);
+      <<0$value[M4_WORD_RANGE] = ! *reset && (((#regs == /top$dest_reg_wr) && /top$reg_write) ? /top$rslt_wr : $RETAIN);
       
    m4_ifelse_block(M4_PENDING_ENABLED, 1, ['
    // Write $   \SV_pluspending along with $value, but coded differently because it must be reset.
