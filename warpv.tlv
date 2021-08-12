@@ -4091,7 +4091,7 @@ m4+definitions(['
          m4_ifexpr(M4_REG_BYPASS_STAGES >= 1, ['(/top$valid_dest_reg_valid_rd[0] && (/top$goodPathMask[0] || /top$second_issue[0]) && (/top$dest_reg[0] == $reg)) ? {/top$rslt[0], /top$reg_wr_pending[0]} :'])
          m4_ifexpr(M4_REG_BYPASS_STAGES >= 2, ['(/top$valid_dest_reg_valid_rd[1] && (/top$goodPathMask[1] || /top$second_issue[1]) && (/top$dest_reg[1] == $reg)) ? {/top$rslt[1], /top$reg_wr_pending[1]} :'])
          m4_ifexpr(M4_REG_BYPASS_STAGES >= 3, ['(/top$valid_dest_reg_valid_rd[2] && (/top$goodPathMask[2] || /top$second_issue[2]) && (/top$dest_reg[2] == $reg)) ? {/top$rslt[2], /top$reg_wr_pending[2]} :'])
-         {/top/regs[$reg]>>M4_REG_BYPASS_STAGES$value;, m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$reg]>>M4_REG_BYPASS_STAGES$pending'])} : 0;
+         {/top/regs[$reg]>>M4_REG_BYPASS_STAGES$value, m4_ifelse(M4_PENDING_ENABLED, ['0'], ['1'b0'], ['/top/regs[$reg]>>M4_REG_BYPASS_STAGES$pending'])} : 0;
       // Replay if this source register is pending.
       $replay = $is_reg_condition && $pending;
      
