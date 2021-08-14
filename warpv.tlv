@@ -1274,7 +1274,7 @@ m4+definitions(['
    // 5: offset
    // 6: store addr
  
-   m4_asm(ORI, x6, x0, 0)        //     store_addr = 0
+   m4_asm(ORI, x6, x0, 10000000001)        //     store_addr = 1023
    m4_asm(ORI, x1, x0, 1)        //     cnt = 1
    m4_asm(ORI, x2, x0, 1010)     //     ten = 10
    m4_asm(ORI, x3, x0, 0)        //     out = 0
@@ -1445,7 +1445,7 @@ m4+definitions(['
          @M4_FETCH_STAGE
             // This instruction is selected from all instructions, based on #instr_mem. Not sure if this will synthesize well.
             $instr[31:0] =
-               m4_forloop(['m4_instr_ind'], 0, M4_NUM_INSTRS, [' (#instr_mem == m4_instr_ind) ? m4_echo(['m4_instr']m4_instr_ind) :']) 32'b0;
+               m4_forloop(['m4_instr_ind'], 0, M4_NUM_INSTRS, ['assign instrs[m4_echo(m4_instr_ind)] = m4_echo(['m4_instr']m4_instr_ind; ['']m4_new_line               )'])       
       /instr
          @M4_FETCH_STAGE
             ?$fetch
@@ -1463,7 +1463,7 @@ m4+definitions(['
       logic [40*8-1:0] instr_strs [0:M4_NUM_INSTRS];
       
       assign instrs = '{
-         m4_instr0['']m4_forloop(['m4_instr_ind'], 1, M4_NUM_INSTRS, [', m4_echo(['m4_instr']m4_instr_ind)'])
+            m4_forloop(['m4_instr_ind'], 0, M4_NUM_INSTRS, ['assign instrs[m4_echo(m4_instr_ind)] = m4_echo(['m4_instr']m4_instr_ind; ['']m4_new_line               )'])       
       };
       
       // String representations of the instructions for debug.
