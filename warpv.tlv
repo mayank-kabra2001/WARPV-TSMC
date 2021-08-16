@@ -2001,7 +2001,6 @@ m4+definitions(['
          $flw_rslt[M4_WORD_RANGE]   = /orig_load_inst$ld_rslt;
          '])
          '])
-         $addi_rslt[M4_WORD_RANGE]  = /src[1]$reg_value + $raw_i_imm;  // TODO: This has its own adder; could share w/ add/sub.
          $xori_rslt[M4_WORD_RANGE]  = /src[1]$reg_value ^ $raw_i_imm;
          $ori_rslt[M4_WORD_RANGE]   = /src[1]$reg_value | $raw_i_imm;
          $andi_rslt[M4_WORD_RANGE]  = /src[1]$reg_value & $raw_i_imm;
@@ -2014,9 +2013,6 @@ m4+definitions(['
          $sltiu_rslt[M4_WORD_RANGE] = (/src[1]$reg_value < $raw_i_imm) ? 1 : 0;
          $srai_rslt[M4_WORD_RANGE]  = $srai_intermediate_rslt;
          $srli_rslt[M4_WORD_RANGE]  = $srli_intermediate_rslt;
-         $add_sub_rslt[M4_WORD_RANGE] = ($raw_funct7[5] == 1) ?  /src[1]$reg_value - /src[2]$reg_value : /src[1]$reg_value + /src[2]$reg_value;
-         $add_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
-         $sub_rslt[M4_WORD_RANGE]   = $add_sub_rslt;
          $sll_rslt[M4_WORD_RANGE]   = /src[1]$reg_value << /src[2]$reg_value[4:0];
          $slt_rslt[M4_WORD_RANGE]   = (/src[1]$reg_value[M4_WORD_MAX] == /src[2]$reg_value[M4_WORD_MAX]) ? $sltu_rslt : {M4_WORD_MAX'b0,/src[1]$reg_value[M4_WORD_MAX]};
          $sltu_rslt[M4_WORD_RANGE]  = (/src[1]$reg_value < /src[2]$reg_value) ? 1 : 0;
