@@ -1,0 +1,1031 @@
+/*
+AnalogRails generated liberty file
+*/
+
+library(XARlogic_223_svt_mac) {
+  voltage_map (dvdd,0.8);
+  voltage_map (dvss,0);
+  slew_upper_threshold_pct_rise : 80;
+  slew_lower_threshold_pct_rise : 20;
+  slew_upper_threshold_pct_fall : 80;
+  slew_lower_threshold_pct_fall : 20;
+  input_threshold_pct_rise : 50;
+  input_threshold_pct_fall : 50;
+  output_threshold_pct_rise : 50;
+  output_threshold_pct_fall : 50;
+  /*  --------------- *
+  * Design : AND2_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(AND2_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(a&b)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : AND3_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(AND3_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(a&b&c)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : AND4_X1X1_223_svt_mac *
+  * --------------- ) */
+  cell(AND4_X1X1_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(d) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(a&b&c&d)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  
+  /*  --------------- *
+  * Design : BUF_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(BUF_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(a)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : DEMUX12_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(DEMUX12_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(s0) {
+      direction : input;
+    }
+    pin(y0) {
+      direction : output;
+      function : "(a&!s0)";
+    }
+    pin(y1) {
+      direction : output;
+      function : "(a&s0)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : DFFARNASN_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(DFFARNASN_X2X2_223_svt_mac) {
+    ff(ARIQ, ARIQN) {
+      clocked_on : "ck";
+      next_state : "d";
+      preset : "!sn";
+      clear : "!rn";
+      clear_preset_var1 : L;
+      clear_preset_var2 : H;
+    }
+    pin(ck) {
+      direction : input;
+      clock : true;
+      min_pulse_width_high : 0.5;
+      min_pulse_width_low : 0.5;
+    }
+    pin(d) {
+      direction : input;
+    }
+    pin(rn) {
+      direction : input;
+    }
+    pin(sn) {
+      direction : input;
+    }
+    pin(q) {
+      direction : output;
+      function : "ARIQ";
+    }
+    pin(qn) {
+      direction : output;
+      function : "ARIQN";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+ 
+  /*  --------------- *
+  * Design : DFF_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(DFF_X2X2_223_svt_mac) {
+    ff(ARIQ, ARIQN) {
+      clocked_on : "ck";
+      next_state : "d";
+    }
+    pin(ck) {
+      direction : input;
+      clock : true;
+      min_pulse_width_high : 0.5;
+      min_pulse_width_low : 0.5;
+    }
+    pin(d) {
+      direction : input;
+    }
+    pin(q) {
+      direction : output;
+      function : "ARIQ";
+    }
+    pin(qn) {
+      direction : output;
+      function : "ARIQN";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  
+  /*  --------------- *
+  * Design : FADD1B_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(FADD1B_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(ci) {
+      direction : input;
+    }
+    pin(co) {
+      direction : output;
+      function : "((a|b) & (a|ci) & (b|ci))";
+    }
+    pin(s) {
+      direction : output;
+      function : "((a|!b|!ci) & (!a|!b|ci) & (!a|b|!ci) & (a|b|ci))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : HADD1B_X0X0_223_svt_mac *
+  * --------------- ) */
+  cell(HADD1B_X0X0_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(co) {
+      direction : output;
+      function : "(a&b)";
+    }
+    pin(s) {
+      direction : output;
+      function : "((!a|!b) & (a|b))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : HADDCI1B_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(HADDCI1B_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(co) {
+      direction : output;
+      function : "(a|b)";
+    }
+    pin(s) {
+      direction : output;
+      function : "((a|!b) & (!a|b))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : INV_X4X4_223_svt_mac *
+  * --------------- ) */
+  cell(INV_X4X4_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(!a)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  
+  /*  --------------- *
+  * Design : MUX21_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(MUX21_X2X2_223_svt_mac) {
+    pin(a0) {
+      direction : input;
+    }
+    pin(a1) {
+      direction : input;
+    }
+    pin(s0) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "((a0|s0) & (a1|!s0))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : MUX31_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(MUX31_X2X2_223_svt_mac) {
+    pin(a0) {
+      direction : input;
+    }
+    pin(a1) {
+      direction : input;
+    }
+    pin(a2) {
+      direction : input;
+    }
+    pin(s0) {
+      direction : input;
+    }
+    pin(s1) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "((a0|s0|s1) & (a1|!s0|s1) & (a2|!s1))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : MUX41_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(MUX41_X2X2_223_svt_mac) {
+    pin(a0) {
+      direction : input;
+    }
+    pin(a1) {
+      direction : input;
+    }
+    pin(a2) {
+      direction : input;
+    }
+    pin(a3) {
+      direction : input;
+    }
+    pin(s0) {
+      direction : input;
+    }
+    pin(s1) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "((a3&s0&s1) | (a2&!s0&s1) | (a2&a3&s1) | (a1&s0&!s1) | (a1&a3&s0) | (a0&!s0&!s1) | (a0&a2&!s0) | (a0&a1&!s1))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : MUX81_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(MUX81_X2X2_223_svt_mac) {
+    pin(a0) {
+      direction : input;
+    }
+    pin(a1) {
+      direction : input;
+    }
+    pin(a2) {
+      direction : input;
+    }
+    pin(a3) {
+      direction : input;
+    }
+    pin(a4) {
+      direction : input;
+    }
+    pin(a5) {
+      direction : input;
+    }
+    pin(a6) {
+      direction : input;
+    }
+    pin(a7) {
+      direction : input;
+    }
+    pin(s0) {
+      direction : input;
+    }
+    pin(s1) {
+      direction : input;
+    }
+    pin(s2) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "((!s2&!s1&!s0&a0) | (!s2&!s1&s0&a1) | (!s2&s1&!s0&a2) | (!s2&s1&s0&a3) | (s2&!s1&!s0&a4) | (s2&!s1&s0&a5) | (s2&s1&!s0&a6) | (s2&s1&s0&a7))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  
+  
+  /*  --------------- *
+  * Design : NAND2_X2X1_223_svt_mac *
+  * --------------- ) */
+  cell(NAND2_X2X1_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(!a|!b)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+ 
+  /*  --------------- *
+  * Design : NAND3_X2X0_223_svt_mac *
+  * --------------- ) */
+  cell(NAND3_X2X0_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(!a|!b|!c)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  
+ 
+  /*  --------------- *
+  * Design : NAND4_X1X0_223_svt_mac *
+  * --------------- ) */
+  cell(NAND4_X1X0_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(d) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(!a|!b|!c|!d)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  
+  /*  --------------- *
+  * Design : NOR2_X1X2_223_svt_mac *
+  * --------------- ) */
+  cell(NOR2_X1X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(!a&!b)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+ 
+  /*  --------------- *
+  * Design : NOR3_X0X2_223_svt_mac *
+  * --------------- ) */
+  cell(NOR3_X0X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(!a&!b&!c)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  
+  /*  --------------- *
+  * Design : NOR4N_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(NOR4N_X2X2_223_svt_mac) {
+    pin(an) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(d) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(an&!b&!c&!d)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : NOR4_X0X1_223_svt_mac *
+  * --------------- ) */
+  cell(NOR4_X0X1_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(d) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(!a&!b&!c&!d)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+ 
+  /*  --------------- *
+  * Design : OR2_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(OR2_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(a|b)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : OR3_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(OR3_X2X2_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(c) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "(a|b|c)";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+
+  
+  /*  --------------- *
+  * Design : TFF_X2X2_223_svt_mac *
+  * --------------- ) */
+  cell(TFF_X2X2_223_svt_mac) {
+    ff(ARIQ, ARIQN) {
+      clocked_on : "ck";
+      next_state : "(!t & ARIQ) | (!(!t) & (t & !ARIQ))";
+    }
+    pin(ck) {
+      direction : input;
+      clock : true;
+      min_pulse_width_high : 0.5;
+      min_pulse_width_low : 0.5;
+    }
+    pin(t) {
+      direction : input;
+    }
+    pin(q) {
+      direction : output;
+      function : "ARIQ";
+    }
+    pin(qn) {
+      direction : output;
+      function : "ARIQN";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : XNOR2_X0X0_223_svt_mac *
+  * --------------- ) */
+  cell(XNOR2_X0X0_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "((a|!b) & (!a|b))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+  /*  --------------- *
+  * Design : XOR2_X0X0_223_svt_mac *
+  * --------------- ) */
+  cell(XOR2_X0X0_223_svt_mac) {
+    pin(a) {
+      direction : input;
+    }
+    pin(b) {
+      direction : input;
+    }
+    pin(y) {
+      direction : output;
+      function : "((!a|!b) & (a|b))";
+    }
+    pg_pin(dvdd) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(tiehi) {
+      voltage_name : dvdd;
+      pg_type : primary_power;
+    }
+    pg_pin(dvss) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(sub) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+    pg_pin(tielo) {
+      voltage_name : dvss;
+      pg_type : primary_ground;
+    }
+  }
+}
